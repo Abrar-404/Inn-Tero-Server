@@ -17,13 +17,4 @@ app.listen(port, () => {
 });
 
 // added something
-app.use(cors());
-app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Server Running On Speed');
-});
-
-app.listen(port, () => {
-  console.log(`Port is running on: ${port}`);
-});
