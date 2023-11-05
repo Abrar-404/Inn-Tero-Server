@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -28,18 +28,16 @@ async function run() {
     const featureCollection = client
       .db('featureCollection')
       .collection('feature');
-    
-    const roomCollection = client
-      .db('featureCollection')
-      .collection('rooms');
-    
+
+    const roomCollection = client.db('featureCollection').collection('rooms');
+
     // feature section
     app.get('/feature', async (req, res) => {
       const cursor = featureCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
-    
+
     // room section
     app.get('/rooms', async (req, res) => {
       const cursor = roomCollection.find();
