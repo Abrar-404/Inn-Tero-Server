@@ -49,12 +49,12 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
 
-      const options = {
-        // Include only the `title` and `imdb` fields in the returned document
-        projection: { title: 1, service_id: 1, price: 1, img: 1 },
-      };
+      // const options = {
+      //   // Include only the `title` and `imdb` fields in the returned document
+      //   projection: { title: 1, service_id: 1, price: 1, img1: 1 },
+      // };
 
-      const result = await roomCollection.findOne(query, options);
+      const result = await roomCollection.findOne(query);
       res.send(result);
     });
 
