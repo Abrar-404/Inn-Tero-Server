@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
@@ -34,6 +35,14 @@ async function run() {
       .db('featureCollection')
       .collection('addRoom');
 
+    // jwt related
+    app.post('/jwt', async (req, res) => {
+      const user = req.body;
+      console.log(user);
+      const token = jwt.sign(user, 'secret', { expiresIn: '1h' });
+      res.send(token);
+    });
+
     // feature section
     app.get('/feature', async (req, res) => {
       const cursor = featureCollection.find();
@@ -58,9 +67,9 @@ async function run() {
     // room add related
     app.get('/addRoom', async (req, res) => {
       console.log(req.query.email);
-      let query = {}
+      let query = {};
       if (req.query?.email) {
-        query = {email: req.query.email}
+        query = { email: req.query.email };
       }
       const result = await addRoomCollection.find(query).toArray();
       res.send(result);
@@ -74,11 +83,11 @@ async function run() {
     });
 
     app.delete('/addRoom/:id', async (req, res) => {
-      const id = req.params.id
-      const query = { _id: new ObjectId(id) }
-      const result = await addRoomCollection.deleteOne(query)
-      res.send(result)
-    })
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await addRoomCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 });
