@@ -30,6 +30,7 @@ async function run() {
       .collection('feature');
 
     const roomCollection = client.db('featureCollection').collection('rooms');
+    const addRoomCollection = client.db('featureCollection').collection('addRoom')
 
     // feature section
     app.get('/feature', async (req, res) => {
@@ -48,15 +49,18 @@ async function run() {
     app.get('/rooms/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-
-      // const options = {
-      //   // Include only the `title` and `imdb` fields in the returned document
-      //   projection: { title: 1, service_id: 1, price: 1, img1: 1 },
-      // };
-
       const result = await roomCollection.findOne(query);
       res.send(result);
     });
+
+
+    // room add related
+    app.post('/addRoom', async (req, res) => {
+      const added = req.body;
+      console.log(added);
+      const result = await addRoomCollection.insertOne(added)
+      res.send(result)
+ })
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 });
