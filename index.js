@@ -30,7 +30,9 @@ async function run() {
       .collection('feature');
 
     const roomCollection = client.db('featureCollection').collection('rooms');
-    const addRoomCollection = client.db('featureCollection').collection('addRoom')
+    const addRoomCollection = client
+      .db('featureCollection')
+      .collection('addRoom');
 
     // feature section
     app.get('/feature', async (req, res) => {
@@ -53,14 +55,23 @@ async function run() {
       res.send(result);
     });
 
-
     // room add related
+    app.get('/addRoom', async (req, res) => {
+      console.log(req.query.email);
+      let query = {}
+      if (req.query?.email) {
+        query = {email: req.query.email}
+      }
+      const result = await addRoomCollection.find(query).toArray();
+      res.send(result);
+    });
+
     app.post('/addRoom', async (req, res) => {
       const added = req.body;
       console.log(added);
-      const result = await addRoomCollection.insertOne(added)
-      res.send(result)
- })
+      const result = await addRoomCollection.insertOne(added);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 });
