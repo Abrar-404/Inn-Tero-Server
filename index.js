@@ -93,7 +93,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get('/rooms/:id', logger, verifyToken, async (req, res) => {
+    app.get('/rooms/:id', logger, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await roomCollection.findOne(query);
@@ -101,17 +101,17 @@ async function run() {
     });
 
     // room add related
-    app.get('/addRoom', logger, verifyToken, async (req, res) => {
+    app.get('/addRoom', logger, async (req, res) => {
       console.log(req.query.email);
       console.log(req.cookies.token);
 
-      if (req.query?.email !== req.user?.email) {
-        return res.status(403).send({message: 'Forbidden Access'})
-      }
       let query = {};
       if (req.query?.email) {
         query = { email: req.query.email };
       }
+      // if (req.query.email !== req.user?.email) {
+      //   return res.status(403).send({ message: 'Forbidden Access' });
+      // }
       const result = await addRoomCollection.find(query).toArray();
       res.send(result);
     });
@@ -123,7 +123,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete('/addRoom/:id', logger, verifyToken, async (req, res) => {
+    app.delete('/addRoom/:id', logger, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await addRoomCollection.deleteOne(query);
