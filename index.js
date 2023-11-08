@@ -65,7 +65,7 @@ async function run() {
       .collection('addRoom');
 
     // jwt related
-    app.post('/jwt', logger, verifyToken, async (req, res) => {
+    app.post('/jwt', logger, async (req, res) => {
       const user = req.body;
       console.log(user);
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
@@ -128,6 +128,30 @@ async function run() {
       const query = { _id: new ObjectId(id) };
       const result = await addRoomCollection.deleteOne(query);
       res.send(result);
+    });
+
+    app.get('/sortedPrice/:id', async (req, res) => {
+      const sortedValue = req.params.id;
+      console.log(sortedValue);
+      if (sortedValue === 'low') {
+        const products = await roomCollection
+          .find()
+          .sort({ price: 1 })
+          .toArray();
+        res.json(products);
+        return;
+      } else if (sortedValue == 'high') {
+        const products = await roomCollection
+          .find()
+          .sort({ price: -1 })
+          .toArray();
+        res.json(products);
+        return;
+      } else {
+        const products = await roomCollection.find().toArray();
+        res.json(products);
+        return;
+      }
     });
 
     // Send a ping to confirm a successful connection
