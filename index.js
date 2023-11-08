@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 // middleware
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: ['http://localhost:5173', 'https://inn-tero.web.app'],
     credentials: true,
   })
 );
@@ -74,7 +74,7 @@ async function run() {
       res
         .cookie('token', token, {
           httpOnly: true,
-          secure: false,
+          secure: true,
         })
         .send({ success: true });
     });
